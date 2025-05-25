@@ -1,14 +1,26 @@
-import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
 
-const isProtectedRoute = createRouteMatcher([
-  '/dashboard(.*)',
-  '/profile(.*)',
-])
-
-export default clerkMiddleware((auth, req) => {
-  // Temporarily disabled to debug 500 error
-  // if (isProtectedRoute(req)) auth().protect()
-})
+export function middleware(request: NextRequest) {
+  // For now, just allow all requests to pass through
+  // This avoids the Edge Runtime compatibility issues with Clerk
+  
+  // Alternative approach for basic route protection (if needed later):
+  // const protectedRoutes = ['/dashboard', '/profile']
+  // const isProtectedRoute = protectedRoutes.some(route => 
+  //   request.nextUrl.pathname.startsWith(route)
+  // )
+  // 
+  // if (isProtectedRoute) {
+  //   // Check for auth cookie or redirect to sign-in
+  //   const authCookie = request.cookies.get('__clerk_db_jwt')
+  //   if (!authCookie) {
+  //     return NextResponse.redirect(new URL('/sign-in', request.url))
+  //   }
+  // }
+  
+  return NextResponse.next()
+}
 
 export const config = {
   matcher: [
