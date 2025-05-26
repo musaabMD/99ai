@@ -2,6 +2,7 @@ import { notFound } from "next/navigation"
 import { Header } from "@/components/header"
 import { AgentHero } from "@/components/agent-hero"
 import { AgentFeatures } from "@/components/agent-features"
+import { AgentCompare } from "@/components/agent-compare"
 import { RelatedAgents } from "@/components/related-agents"
 import { agents } from "@/lib/agents-data"
 
@@ -19,10 +20,11 @@ export default function AgentPage({ params }: AgentPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Header />
       <AgentHero agent={agent} />
       <AgentFeatures agent={agent} />
+      <AgentCompare currentAgent={agent} />
       <RelatedAgents currentAgent={agent} />
     </div>
   )

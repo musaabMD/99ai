@@ -3,7 +3,8 @@
 import { useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { Search } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Search, Filter } from "lucide-react"
 
 const allTags = [
   "Email Automation",
@@ -40,37 +41,63 @@ export function SearchAndFilter({ onSearch, onFilterTags }: SearchAndFilterProps
   }
 
   return (
-    <div className="mb-12 text-center">
+    <div className="mb-8 space-y-6">
       {/* Search Bar */}
-      <div className="mb-10">
-        <div className="relative max-w-2xl mx-auto">
-          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-6 w-6" />
+      <div className="flex justify-center">
+        <div className="relative w-full max-w-xl">
+          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
           <Input
             placeholder="Search AI agents..."
             value={searchQuery}
             onChange={(e) => handleSearch(e.target.value)}
-            className="pl-14 h-14 text-lg border-2 border-gray-200 focus:border-gray-400 focus:ring-0 bg-white rounded-full shadow-sm"
+            className="pl-12 h-12 text-base border-input bg-background rounded-lg shadow-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           />
         </div>
       </div>
 
-      {/* Airbnb Style Filter Buttons */}
-      <div className="mb-8">
-        <div className="flex flex-wrap justify-center gap-4">
+      {/* Filter Section */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+          <Filter className="h-4 w-4" />
+          <span>Filter by category</span>
+        </div>
+        
+        <div className="flex flex-wrap justify-center gap-2">
           {allTags.map((tag) => (
-            <button
+            <Button
               key={tag}
+              variant={selectedTags.includes(tag) ? "default" : "outline"}
+              size="sm"
               onClick={() => toggleTag(tag)}
-              className={`px-6 py-3 rounded-full text-base font-medium transition-all duration-200 border-2 ${
+              className={`rounded-full text-sm font-medium transition-all duration-200 ${
                 selectedTags.includes(tag)
-                  ? "bg-gray-900 text-white border-gray-900"
-                  : "bg-white text-gray-700 border-gray-300 hover:border-gray-400 hover:shadow-md"
+                  ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                  : "bg-background text-foreground border-border hover:bg-accent hover:text-accent-foreground"
               }`}
             >
               {tag}
-            </button>
+            </Button>
           ))}
         </div>
+
+        {/* Selected filters display */}
+        {selectedTags.length > 0 && (
+          <div className="flex items-center justify-center gap-2 pt-2">
+            <span className="text-sm text-muted-foreground">Active filters:</span>
+            <div className="flex flex-wrap gap-1">
+              {selectedTags.map((tag) => (
+                <Badge
+                  key={tag}
+                  variant="secondary"
+                  className="text-xs px-2 py-1 cursor-pointer hover:bg-destructive hover:text-destructive-foreground transition-colors"
+                  onClick={() => toggleTag(tag)}
+                >
+                  {tag} ×
+                </Badge>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )
